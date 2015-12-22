@@ -79,8 +79,8 @@ class Translator(object):
     # the duration needs to be translated to parts of 96.  This allows us to represent whole notes and triplets of 32nd notes.  Code these starting at ascii 128 up through ?... the note needs to be translated to a char from 33 to 126 somehow... code middle c as ascii 79... code a rest as chr(254)
     def note_to_text(self, note):
         divs_per_beat = self.divisions * 4
-        to_96parts = 96 / divs_per_beat
-        return chr(79 - note['note']) + chr(127 + to_96parts * note['duration'])
+        to_96parts = 96. / divs_per_beat
+        return chr(79 - note['note']) + chr(127 + int(to_96parts * note['duration']))
 
     def chords_to_text(self, chord_dict):
         chords = []
