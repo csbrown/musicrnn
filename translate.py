@@ -71,16 +71,16 @@ class Translator(object):
         return chord_dict    
    
     def translate_rest(self):
-        return 100
+        return -175 # so that a rest gets coded as chr(254)
 
     def translate_note(self, step, alter, octave):
         return Translator.step_map[step] + 12*(octave - 4) + alter
 
-    # the duration needs to be translated to parts of 48.  This allows us to represent whole notes and triplets of 16th notes.  Code these starting at ascii 33 up through 48... the note needs to be translated to a char from 128 to 254 somehow... code middle c as ascii 192... code a rest as chr(92)
+    # the duration needs to be translated to parts of 96.  This allows us to represent whole notes and triplets of 32nd notes.  Code these starting at ascii 128 up through ?... the note needs to be translated to a char from 33 to 126 somehow... code middle c as ascii 79... code a rest as chr(254)
     def note_to_text(self, note):
         divs_per_beat = self.divisions * 4
-        to_48parts = 48 / divs_per_beat
-        return chr(192 - note['note']) + chr(33 + to_48parts * note['duration'])
+        to_96parts = 96 / divs_per_beat
+        return chr(79 - note['note']) + chr(127 + to_96parts * note['duration'])
 
     def chords_to_text(self, chord_dict):
         chords = []
