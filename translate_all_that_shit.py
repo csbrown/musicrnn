@@ -26,7 +26,7 @@ if __name__ == "__main__":
                 f.write(trans.translate())
                 f.close()
             except:
-                print 'fuckit!', next(count)
+                print('fuckit! ' + str(next(count)))
                 pass
         else:
             trans = Translator(the_input)
