@@ -18,21 +18,16 @@ if __name__ == "__main__":
     count = counter()
     for i in range(args.min, args.max + 1):
         the_input = os.path.join(args.base_path, "xml-clean", str(i) + ".xml")
-        the_output = os.path.join(args.base_path, "translated-music", str(i) + ".txt")
-        if args.fuckit:
-            try:
-                trans = Translator(the_input)
-                f = open(the_output, "w")
-                f.write(trans.translate())
-                f.close()
-            except:
-                print('fuckit! ' + str(next(count)))
-                pass
-        else:
+        the_output = os.path.join(args.base_path, "translated-music", str(i) + ".mtxt")
+        try:
             trans = Translator(the_input)
             f = open(the_output, "w")
             f.write(trans.translate())
             f.close()
+        except Exception as e:
+            print('error in: ' + str(i) + " number of errors so far: " + str(next(count)))
+            if not args.fuckit:
+                raise e
 
 
 

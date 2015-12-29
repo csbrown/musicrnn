@@ -56,9 +56,9 @@ class Translator(object):
                         octave = int(pitch.find('octave').text)
                         alter = int(pitch.find('alter').text) if pitch.find('alter') is not None else 0
                         chord_dict[self.timekeeper].append({
-                            'note': self.translate_note(step, octave, alter),
+                            'note': self.translate_note(octave, step, alter),
                             'duration': duration
-                        })        
+                        })       
                     # possibly a rest
                     elif rest is not None:
                         chord_dict[self.timekeeper].append({
@@ -73,7 +73,7 @@ class Translator(object):
     def translate_rest(self):
         return -175 # so that a rest gets coded as chr(254)
 
-    def translate_note(self, step, alter, octave):
+    def translate_note(self, octave, step, alter):
         return Translator.step_map[step] + 12*(octave - 4) + alter
 
     # the duration needs to be translated to parts of 96.  This allows us to represent whole notes and triplets of 32nd notes.  Code these starting at ascii 128 up through ?... the note needs to be translated to a char from 33 to 126 somehow... code middle c as ascii 79... code a rest as chr(254)
@@ -82,10 +82,11 @@ class Translator(object):
         to_96parts = 96. / divs_per_beat
         return chr(79 - note['note']) + chr(127 + int(to_96parts * note['duration']))
 
+    # code note divisions as chr(253)
     def chords_to_text(self, chord_dict):
         chords = []
         for time in sorted(chord_dict):
-            chords.append(''.join(map(self.note_to_text, chord_dict[time])))
+            chords.append(chr(253).join(map(self.note_to_text, chord_dict[time])))
         return ' '.join(chords)
  
     def translate(self):
