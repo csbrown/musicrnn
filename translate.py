@@ -12,6 +12,7 @@ class Translator(object):
         'B' : 11
     }
     type_to_time_map = {
+        '32nd' : 0.5,
         '16th' : 1,
         'eighth' : 2,
         'quarter' : 4,
@@ -48,6 +49,10 @@ class Translator(object):
                     except:
                         duration = Translator.type_to_time_map[child.find('type').text] * self.divisions / 4
                     previous_dur = duration
+                    if int(24./ self.divisions * duration) - 24./ self.divisions * duration:
+                        print('wah')
+                        continue
+                        
                     # possibly a note
                     pitch = child.find('pitch')
                     rest = child.find('rest')
@@ -80,6 +85,7 @@ class Translator(object):
     def note_to_text(self, note):
         divs_per_beat = self.divisions * 4
         to_96parts = 96. / divs_per_beat
+        print(to_96parts*note['duration']-int(to_96parts*note['duration'])) if to_96parts*note['duration']-int(to_96parts*note['duration']) else None
         return chr(79 - note['note']) + chr(127 + int(to_96parts * note['duration']))
 
     # code note divisions as chr(253)
